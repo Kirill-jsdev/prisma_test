@@ -1,9 +1,23 @@
 import express from "express";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
+app.use(express.json());
+
+app.get("/users", async (req, res) => {
+  const users = await prisma.user.findMany();
+  res.json(users);
+});
+
+app.post("/users", async (req, res) => {
+  const { name, email } = req.body;
+  const user = await prisma.user.create({
+    data: { name, email },
+  });
+  res.json(user);
 });
 
 app.listen(3000, () => {
