@@ -11,4 +11,16 @@ model User {
   id    Int    @id @default(autoincrement())
   name  String
   email String @unique
+  posts Post[] 
+}
+
+model Post {
+  id      Int     @id @default(autoincrement())
+  title   String
+  content String
+  userId  Int     // Foreign key to User
+  user    User    @relation(fields: [userId], references: [id]) // Relation to User
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
